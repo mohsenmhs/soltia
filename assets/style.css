@@ -1,0 +1,27 @@
+.button {
+    padding: 2rem 7rem 2rem 1rem;
+    border: 0.2rem solid #84817e;
+    background-image: linear-gradient(to right, #f0ae64, #ed9444);
+    font-size: 2rem;
+    font-weight: 900;
+    position: relative;
+    font-family: sans-serif;
+}
+
+.button:before, .button:after {
+    position: absolute;
+    right: 1rem;
+    content: '|';
+    height: 5rem;
+    width: 5rem;
+    border-radius: 100%;
+    font-size: 3rem;
+    top: 1rem;
+  }
+  .button:before {
+    background-color: #fff;
+    transform: rotate(45deg);
+  }
+  .button:after {
+    transform: rotate(-45deg);
+  }
