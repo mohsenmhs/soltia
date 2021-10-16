@@ -1,2 +1,2 @@
-# soltia
+# Soltia
 Front-End test
