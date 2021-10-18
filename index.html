@@ -1,4 +1,35 @@
-<link rel="stylesheet" href="assets/style.css">
-<button class="button">
-    Delete
-</button>
+<html>
+
+<head>
+    <script type="module" src="assets/script.js"></script>
+    <link rel="stylesheet" href="assets/style.css">
+
+</head>
+
+<body>
+    <button class="button delete-button">
+        Delete
+    </button>
+
+    <div class="soltia-search">
+        <div id="soltiaSearch" class="autocomplete">
+            <input class="autocomplete-input" placeholder="Search Wikipedia" aria-label="Search Wikipedia">
+            <ul class="autocomplete-result-list"></ul>
+        </div>
+        <div class="search-history">
+            <div class="search-history-head">
+                <h3>
+                    Search history
+                </h3>
+
+                <button id="clearSearchHistory" class="transparent-button">
+                    Clear search history
+                </button>
+            </div>
+            <div class="search-history-body" id="soltiaSearchHistory">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
