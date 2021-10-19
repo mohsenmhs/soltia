@@ -127,9 +127,10 @@ html{
 }
 
 .transparent-button{
-  background: transparent;
+    background: transparent;
     border: none;
     cursor: pointer;
+    font-size: 0.8rem;
 }
 .transparent-button:hover{
     color: #6c6c6c
