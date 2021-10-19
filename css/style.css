@@ -96,6 +96,7 @@ html{
     list-style: none;
     padding: 10px 0;
     margin-top: 2px;
+    visibility: hidden;
   }
 
   
@@ -132,6 +133,10 @@ html{
 }
 .transparent-button:hover{
     color: #6c6c6c
+}
+.search-history-body{
+  margin: 0;
+  padding: 0;
 }
   .search-history-head, .history-item{
     display: flex;

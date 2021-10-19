@@ -26,8 +26,9 @@ class SearchHistory {
     }
 
     #renderHistoryItem = (selectedResult) => {
-        const historyItem = document.createElement('div')
+        const historyItem = document.createElement('li')
         historyItem.classList.add("history-item")
+        historyItem.setAttribute('aria-label', selectedResult.title)
 
         const historyItemTitle = `<span class="history-item-title">${selectedResult.title}</span>`
         historyItem.insertAdjacentHTML('beforeend', historyItemTitle)
@@ -43,6 +44,8 @@ class SearchHistory {
         historyItemClear.classList.add("delete-button")
         historyItemClear.classList.add("transparent-button")
         historyItemClear.classList.add("icon-clear-button")
+        historyItemClear.setAttribute('aria-label', 'Clear hisory item: ' + selectedResult.title)
+        historyItemClear.setAttribute('name', 'Clear hisory item: ' + selectedResult.title)
 
         historyItemClear.addEventListener('click', () => this.#handleSearchHistoryItemClearClick(historyItem))
         historyItemInfo.insertAdjacentElement('beforeend', historyItemClear)

@@ -58,6 +58,8 @@ class Autocomplete {
     queryClear.classList.add("query-clear")
     queryClear.classList.add("delete-button")
     queryClear.classList.add("transparent-button")
+    queryClear.setAttribute('aria-label', 'Clear search value')
+    queryClear.setAttribute('name', 'Clear search value')
     queryClear.addEventListener('click', this.handleClearQueryClick)
     queryClearContainer.appendChild(queryClear)
     this.autoCompleteContainer.insertAdjacentElement('beforeend', queryClearContainer)
