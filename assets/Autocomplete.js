@@ -1,37 +1,14 @@
-// Creates a props object with overridden toString function. toString returns an attributes
-// string in the format: `key1="value1" key2="value2"` for easy use in an HTML string.
-class Props {
-  constructor(index, selectedIndex, baseClass) {
-    this.id = `${baseClass}-result-${index}`
-    this.class = `${baseClass}-result`
-    this['data-result-index'] = index
-    this.role = 'option'
-    if (index === selectedIndex) {
-      this['aria-selected'] = 'true'
-    }
-  }
-
-  toString() {
-    return Object.keys(this).reduce(
-      (str, key) => `${str} ${key}="${this[key]}"`,
-      ''
-    )
-  }
-}
-
 class Autocomplete {
   value = ''
   searchCounter = 0
   results = []
   selectedIndex = -1
   baseClass = 'autocomplete'
-  position = "below"
-  idCounter = 0
   expanded = false
 
-  #defaultSearchDelay = 0.5 * 1000 /// 0.5 second delay to trigger call API for search 
+  #DEFAULT_SEARCH_DELAY = 0.5 * 1000 /// 0.5 second delay to trigger call API for search 
   constructor({
-    root,
+    autoCompleteContainerId,
     search,
     getResultValue,
     onSubmit,
@@ -41,10 +18,10 @@ class Autocomplete {
     this.search = search
     this.getResultValue = getResultValue;
     this.onSubmit = onSubmit;
-    this.root = document.getElementById(root);
-    this.input = this.root.querySelector('input');
-    this.resultList = this.root.querySelector('ul');
-    this.searchDelay = searchDelay || this.#defaultSearchDelay
+    this.autoCompleteContainer = document.getElementById(autoCompleteContainerId);
+    this.input = this.autoCompleteContainer.querySelector('input');
+    this.resultList = this.autoCompleteContainer.querySelector('ul');
+    this.searchDelay = searchDelay || this.#DEFAULT_SEARCH_DELAY
     this.initialize()
 
   }
@@ -61,23 +38,18 @@ class Autocomplete {
     this.resultList.style.width = '100%'
     this.resultList.style.boxSizing = 'border-box'
 
-    // Generate ID for results list if it doesn't have one
-    if (!this.resultList.id) {
-      this.resultList.id = `${this.baseClass}-result-list-${++this.idCounter}`
-    }
+    // Generate ID for results list 
+    this.resultList.id = `${this.baseClass}-result-list`
+
     this.input.setAttribute('aria-owns', this.resultList.id)
 
 
     this.input.addEventListener('input', this.handleInput)
     this.input.addEventListener('keydown', this.handleKeyDown)
     this.input.addEventListener('focus', this.handleFocus)
-    this.input.addEventListener('blur', this.handleBlur)
-    this.resultList.addEventListener(
-      'mousedown',
-      this.handleResultMouseDown
-    )
     this.resultList.addEventListener('click', this.handleResultClick)
 
+    ///Clear Query button
     const queryClearContainer = document.createElement('div')
     queryClearContainer.classList.add("query-clear-container")
 
@@ -86,20 +58,17 @@ class Autocomplete {
     queryClear.classList.add("query-clear")
     queryClear.classList.add("delete-button")
     queryClear.classList.add("transparent-button")
-    queryClear.addEventListener('click', () => {
-      this.hideResults()
-      this.setValue()
-      this.updateStyle()
-    })
+    queryClear.addEventListener('click', this.handleClearQueryClick)
     queryClearContainer.appendChild(queryClear)
-    this.root.insertAdjacentElement('beforeend', queryClearContainer)
+    this.autoCompleteContainer.insertAdjacentElement('beforeend', queryClearContainer)
 
     this.updateStyle()
   }
 
 
   handleInput = event => {
-    clearTimeout(this.searchDelayTimeout)
+    ////Handle user key down delay. Do not search if the user delay is less than the "searchDelay"
+    if (this.searchDelayTimeout) clearTimeout(this.searchDelayTimeout)
 
     const { value } = event.target
     this.value = value
@@ -125,7 +94,12 @@ class Autocomplete {
         break
       }
       case 'Tab': {
-        this.selectResult()
+        const selectedResult = this.results[this.selectedIndex]
+        if (selectedResult) {
+          this.onSubmit(selectedResult)
+          event.preventDefault()
+          this.selectResult()
+        }
         break
       }
       case 'Enter': {
@@ -152,20 +126,10 @@ class Autocomplete {
       this.handleInput(event)
   }
 
-  handleBlur = () => {
-    ///Handle blur
-
-  }
-
-  // The mousedown event fires before the blur event. Calling preventDefault() when
-  // the results list is clicked will prevent it from taking focus, firing the
-  // blur event on the input element, and closing the results list before click fires.
-  handleResultMouseDown = event => {
-    event.preventDefault()
-  }
 
   handleResultClick = event => {
     const { target } = event
+    //A result can be found by finding the clicked element
     const result = target.closest('[data-result-index]')
     if (result) {
       this.selectedIndex = parseInt(result.dataset.resultIndex, 10)
@@ -173,6 +137,13 @@ class Autocomplete {
       this.selectResult()
       this.onSubmit(selectedResult)
     }
+  }
+
+
+  handleClearQueryClick = () => {
+    this.hideResults()
+    this.setValue()
+    this.updateStyle()
   }
 
   handleArrows = selectedIndex => {
@@ -195,22 +166,29 @@ class Autocomplete {
 
   updateResults = value => {
     const currentSearch = ++this.searchCounter
-    this.search(value).then(results => {
-      if (currentSearch !== this.searchCounter) {
-        return
-      }
-      this.results = results
-      this.handleLoaded()
+    this.search(value)
+      .then(results => {
 
-      if (this.results.length === 0) {
-        this.hideResults()
-        return
-      }
+        //Handle results race
+        if (currentSearch !== this.searchCounter) {
+          return
+        }
+        this.results = results
+        this.handleLoaded()
 
-      this.selectedIndex = this.autoSelect ? 0 : -1
-      this.handleUpdate(this.results, this.selectedIndex)
-      this.showResults()
-    })
+        if (this.results.length === 0) {
+          this.hideResults()
+          return
+        }
+
+        this.selectedIndex = 0
+        this.handleUpdate(this.results, this.selectedIndex)
+        this.showResults()
+      })
+      .catch(error => {
+        console.error(error)
+        ///notifyUserOfError(error) ///Notif User about error
+      })
   }
 
   showResults = () => {
@@ -225,6 +203,49 @@ class Autocomplete {
     this.setAttribute('aria-activedescendant', '')
     this.handleUpdate(this.results, this.selectedIndex)
     this.handleHide()
+  }
+
+
+
+  setValue = result => {
+    this.input.value = result ? this.getResultValue(result) : ''
+    this.value = this.input.value
+  }
+
+  handleUpdate = (results, selectedIndex) => {
+    this.resultList.innerHTML = ''
+    results.forEach((result, index) => {
+      const resultHTML = this.renderResult({ result, index, selectedIndex })
+      this.resultList.insertAdjacentHTML('beforeend', resultHTML)
+    })
+
+    this.input.setAttribute(
+      'aria-activedescendant',
+      selectedIndex > -1 ? `${this.baseClass}-result-${selectedIndex}` : ''
+    )
+
+    this.checkSelectedResultVisible(this.resultList)
+  }
+
+
+  renderResult = ({ result, index, selectedIndex }) => {
+    const id = `${this.baseClass}-result-${index}`
+    const className = `${this.baseClass}-result`
+    const dataResultIndex = index
+    const role = 'option'
+    const ariaSelected = index === selectedIndex ? 'true' : 'false'
+    return `<li id=${id} class=${className} data-result-index=${dataResultIndex} role=${role} aria-selected=${ariaSelected}>${this.boldQuery(this.getResultValue(result), this.value)}</li>`
+  }
+
+  boldQuery = (string, query) => {
+    const upperCaseString = string.toUpperCase();
+    const upperCaseQuery = query.toUpperCase();
+    const queryIndex = upperCaseString.indexOf(upperCaseQuery);
+    if (!string || queryIndex === -1) {
+      return string; // No query found
+    }
+    const queryLength = query.length;
+    return string.substr(0, queryIndex) + '<span>' + string.substr(queryIndex, queryLength) + '</span>' + this.boldQuery(string.substr(queryIndex + queryLength), query);
   }
 
   // Make sure selected result isn't scrolled out of view
@@ -250,65 +271,6 @@ class Autocomplete {
     }
   }
 
-
-  destroy = () => {
-    this.search = null
-
-    this.onSubmit = null
-
-    this.root = null
-    this.input = null
-    this.resultList = null
-    this.getResultValue = null
-  }
-
-  setAttribute = (attribute, value) => {
-    this.input.setAttribute(attribute, value)
-  }
-
-  setValue = result => {
-    this.input.value = result ? this.getResultValue(result) : ''
-    this.value = this.input.value
-  }
-
-  boldQuery = (string, query) => {
-    const upperCaseString = string.toUpperCase();
-    const upperCaseQuery = query.toUpperCase();
-    const queryIndex = upperCaseString.indexOf(upperCaseQuery);
-    if (!string || queryIndex === -1) {
-      return string; // bail early
-    }
-    const queryLength = query.length;
-    return string.substr(0, queryIndex) + '<span>' + string.substr(queryIndex, queryLength) + '</span>' + this.boldQuery(string.substr(queryIndex + queryLength), query);
-  }
-  renderResult = (result, props) => {
-    return `<li ${props}>${this.boldQuery(this.getResultValue(result), this.value)}</li>`
-  }
-
-  handleUpdate = (results, selectedIndex) => {
-    this.resultList.innerHTML = ''
-    results.forEach((result, index) => {
-      const props = new Props(index, selectedIndex, this.baseClass)
-      const resultHTML = this.renderResult(result, props)
-      if (typeof resultHTML === 'string') {
-        this.resultList.insertAdjacentHTML('beforeend', resultHTML)
-      } else {
-        this.resultList.insertAdjacentElement('beforeend', resultHTML)
-      }
-    })
-
-    this.input.setAttribute(
-      'aria-activedescendant',
-      selectedIndex > -1 ? `${this.baseClass}-result-${selectedIndex}` : ''
-    )
-
-    if (this.resetPosition) {
-      this.resetPosition = false
-      this.updateStyle()
-    }
-    this.checkSelectedResultVisible(this.resultList)
-  }
-
   handleShow = () => {
     this.expanded = true
     this.updateStyle()
@@ -316,7 +278,6 @@ class Autocomplete {
 
   handleHide = () => {
     this.expanded = false
-    this.resetPosition = true
     this.updateStyle()
   }
 
@@ -330,22 +291,30 @@ class Autocomplete {
     this.updateStyle()
   }
 
+  setAttribute = (attribute, value) => {
+    this.input.setAttribute(attribute, value)
+  }
 
   updateStyle = () => {
-    this.root.dataset.expanded = this.expanded
-    this.root.dataset.loading = this.loading
-    this.root.dataset.position = this.position
-    this.root.dataset.value = this.value ? '' : 'empty'
+    this.autoCompleteContainer.dataset.expanded = this.expanded
+    this.autoCompleteContainer.dataset.loading = this.loading
+    this.autoCompleteContainer.dataset.value = this.value ? '' : 'empty'
 
     this.resultList.style.visibility = this.expanded ? 'visible' : 'hidden'
     this.resultList.style.pointerEvents = this.expanded ? 'auto' : 'none'
-    if (this.position === 'below') {
-      this.resultList.style.bottom = null
-      this.resultList.style.top = '100%'
-    } else {
-      this.resultList.style.top = null
-      this.resultList.style.bottom = '100%'
-    }
+
+    this.resultList.style.top = '100%'
+
+  }
+
+
+  destroy = () => {
+    this.search = null
+    this.onSubmit = null
+    this.autoCompleteContainer = null
+    this.input = null
+    this.resultList = null
+    this.getResultValue = null
   }
 }
 

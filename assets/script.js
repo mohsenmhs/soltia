@@ -11,9 +11,9 @@ clearSearchHistory.addEventListener('click', serchHistory.clearSearchHistory)
 
 new Autocomplete(
     {
-        root: 'soltiaSearch',
+        autoCompleteContainerId: 'soltiaSearch',
 
-        // Search function can return a promise
+        // Search function should return a promise
         // which resolves with an array of
         // results. In this case we're using
         // the Wikipedia search API.
@@ -37,7 +37,7 @@ new Autocomplete(
         // Wikipedia returns a format like this:
         //
         // {
-        //   pageid: 12345,
+        //   ...
         //   title: 'Article title',
         //   ...
         // }
@@ -46,8 +46,7 @@ new Autocomplete(
         getResultValue:
             result => result.title,
 
-        // Open the selected article in
-        // a new window
+        // Push the selected result in the search history
         onSubmit:
             result => {
                 if (result)

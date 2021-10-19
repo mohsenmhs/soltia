@@ -1,7 +1,7 @@
 html{
   font-family: sans-serif;
 }
-.button {
+.soltia-button {
     padding: 3rem 9rem 3rem 1rem;
     border: 0.2rem solid #84817e;
     background-image: linear-gradient(to right, #f0ae64, #ed9444);
@@ -11,6 +11,8 @@ html{
 .delete-button{
   position: relative;
 }
+
+/* Delete icon */
 .delete-button:before, .delete-button:after {
   content: '|';
   position: absolute;
@@ -25,7 +27,7 @@ html{
   transform: rotate(-45deg);
 }
 
-.button:before, .button:after {
+.soltia-button:before, .soltia-button:after {
     right: 1rem;
     height: 5rem;
     width: 5rem;
@@ -34,7 +36,8 @@ html{
     top: 1rem;
     padding: 1rem;
   }
-  .button:before {
+  /* Delete icon background */
+  .soltia-button:before {
     background-color: #fff;
   }
 
@@ -63,10 +66,6 @@ html{
   .autocomplete-input[aria-expanded="true"] {
     background-color: #fff;
     outline: none;
-  }
-  
-  
-  [data-position="above"] .autocomplete-input[aria-expanded="true"] {
     z-index: 2;
   }
   
@@ -83,6 +82,7 @@ html{
     top: 50%;
     transform: translateY(-50%);
     animation: rotate 1s infinite linear;
+    z-index: 5;
   }
   
   .autocomplete-result-list {
@@ -95,15 +95,9 @@ html{
     background: #fff;
     list-style: none;
     padding: 10px 0;
-  }
-  
-  [data-position="below"] .autocomplete-result-list {
     margin-top: 2px;
   }
-  
-  [data-position="above"] .autocomplete-result-list {
-    margin-bottom: 2px;
-  }
+
   
   /* Single result item */
   .autocomplete-result {
@@ -180,6 +174,7 @@ html{
     top: 0;
     display: flex;
     align-items: center;
+    z-index: 5;
   }
 
   .autocomplete[data-loading="true"] .query-clear, .autocomplete[data-value="empty"] .query-clear {

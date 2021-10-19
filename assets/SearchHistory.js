@@ -1,31 +1,28 @@
 class SearchHistory {
-    //Private property 
     #selectedResultCounter = 0
-    #root
+    #searchHistoryContainer
 
     constructor(
-        root
+        searchHistoryContainerId
     ) {
-        this.#root = document.getElementById(root)
+        this.#searchHistoryContainer = document.getElementById(searchHistoryContainerId)
     }
 
-    //Handle click on clear history item
     #handleSearchHistoryItemClearClick = (historyItem) => {
         historyItem.remove()
     }
 
-    //Push new item to search history
     pushSearchHistoryNewItem = (result) => {
         const historyNewItem = { title: result, date: new Date(), id: this.#selectedResultCounter++ }
         this.#updateHistoryItems(historyNewItem)
     }
 
     clearSearchHistory = () => {
-        this.#root.innerHTML = ''
+        this.#searchHistoryContainer.innerHTML = ''
     }
     #updateHistoryItems = (selectedResult) => {
         const historyItemHTML = this.#renderHistoryItem(selectedResult)
-        this.#root.insertAdjacentElement('beforeend', historyItemHTML)
+        this.#searchHistoryContainer.insertAdjacentElement('beforeend', historyItemHTML)
     }
 
     #renderHistoryItem = (selectedResult) => {
@@ -64,11 +61,14 @@ class SearchHistory {
         let hours = date.getHours()
         const AmPm = hours >= 12 ? 'PM' : 'AM'
         hours = hours > 12 ? hours - 12 : hours
-        const HH_MM =
-            [hours,
-                date.getMinutes()].join(':')
+        const HH_MM = [hours, date.getMinutes()].join(':')
 
+        //Convert Date to 'YYYY-MM-DD, HH:MM PM/AM' Format
         return YYYY_MM_DD + ', ' + HH_MM + ' ' + AmPm
+    }
+
+    destroy = () => {
+        this.#searchHistoryContainer = null
     }
 }
 
