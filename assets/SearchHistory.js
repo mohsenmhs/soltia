@@ -1,29 +1,34 @@
 class SearchHistory {
-    selectedResultCounter = 0
+    //Private property 
+    #selectedResultCounter = 0
+    #root
 
     constructor(
         root
     ) {
-        this.root = document.getElementById(root)
+        this.#root = document.getElementById(root)
     }
 
-    handleSearchHistoryItemClearClick = (historyItem) => {
+    //Handle click on clear history item
+    #handleSearchHistoryItemClearClick = (historyItem) => {
         historyItem.remove()
     }
+
+    //Push new item to search history
     pushSearchHistoryNewItem = (result) => {
-        const historyNewItem = {title: result, date: new Date(), id: this.selectedResultCounter++}
-        this.updateHistoryItems(historyNewItem)
+        const historyNewItem = { title: result, date: new Date(), id: this.#selectedResultCounter++ }
+        this.#updateHistoryItems(historyNewItem)
     }
 
     clearSearchHistory = () => {
-        this.root.innerHTML = ''
+        this.#root.innerHTML = ''
     }
-    updateHistoryItems = (selectedResult) => {
-        const historyItemHTML = this.renderHistoryItem(selectedResult)
-        this.root.insertAdjacentElement('beforeend', historyItemHTML)
+    #updateHistoryItems = (selectedResult) => {
+        const historyItemHTML = this.#renderHistoryItem(selectedResult)
+        this.#root.insertAdjacentElement('beforeend', historyItemHTML)
     }
 
-    renderHistoryItem = (selectedResult) => {
+    #renderHistoryItem = (selectedResult) => {
         const historyItem = document.createElement('div')
         historyItem.classList.add("history-item")
 
@@ -33,24 +38,24 @@ class SearchHistory {
         const historyItemInfo = document.createElement('div')
         historyItemInfo.classList.add("history-item-info")
 
-        const historyItemDate = `<span class="history-item-date">${this.renderDate(selectedResult.date)}</span>`
+        const historyItemDate = `<span class="history-item-date">${this.#renderDate(selectedResult.date)}</span>`
         historyItemInfo.insertAdjacentHTML('beforeend', historyItemDate)
 
         const historyItemClear = document.createElement('button')
         historyItemClear.classList.add("history-item-clear")
         historyItemClear.classList.add("delete-button")
         historyItemClear.classList.add("transparent-button")
-        historyItemClear.addEventListener('click', () => this.handleSearchHistoryItemClearClick(historyItem))
+        historyItemClear.classList.add("icon-clear-button")
+
+        historyItemClear.addEventListener('click', () => this.#handleSearchHistoryItemClearClick(historyItem))
         historyItemInfo.insertAdjacentElement('beforeend', historyItemClear)
 
         historyItem.insertAdjacentElement('beforeend', historyItemInfo)
 
         return historyItem
-        // `<div class="history-item" id="searchHistory_${selectedResult.id}"><span class="history-item-title">${selectedResult.title}</span>
-        // <div><span class="history-item-date">${this.renderDate(selectedResult.date)}</span><span clas></span></div></div>`
     }
 
-    renderDate = (date) => {
+    #renderDate = (date) => {
         const YYYY_MM_DD =
             [date.getFullYear(),
             date.getMonth() + 1,

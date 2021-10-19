@@ -29,12 +29,14 @@ class Autocomplete {
   idCounter = 0
   expanded = false
 
-  constructor(
+  #defaultSearchDelay = 0.5 * 1000 /// 0.5 second delay to trigger call API for search 
+  constructor({
     root,
     search,
     getResultValue,
     onSubmit,
     searchDelay
+  }
   ) {
     this.search = search
     this.getResultValue = getResultValue;
@@ -42,7 +44,7 @@ class Autocomplete {
     this.root = document.getElementById(root);
     this.input = this.root.querySelector('input');
     this.resultList = this.root.querySelector('ul');
-    this.searchDelay = searchDelay | 500
+    this.searchDelay = searchDelay || this.#defaultSearchDelay
     this.initialize()
 
   }
@@ -76,7 +78,11 @@ class Autocomplete {
     )
     this.resultList.addEventListener('click', this.handleResultClick)
 
+    const queryClearContainer = document.createElement('div')
+    queryClearContainer.classList.add("query-clear-container")
+
     const queryClear = document.createElement('button')
+    queryClear.classList.add("icon-clear-button")
     queryClear.classList.add("query-clear")
     queryClear.classList.add("delete-button")
     queryClear.classList.add("transparent-button")
@@ -85,7 +91,8 @@ class Autocomplete {
       this.setValue()
       this.updateStyle()
     })
-    this.root.insertAdjacentElement('beforeend', queryClear)
+    queryClearContainer.appendChild(queryClear)
+    this.root.insertAdjacentElement('beforeend', queryClearContainer)
 
     this.updateStyle()
   }
@@ -94,11 +101,11 @@ class Autocomplete {
   handleInput = event => {
     clearTimeout(this.searchDelayTimeout)
 
-    this.handleLoading()
     const { value } = event.target
     this.value = value
     this.searchDelayTimeout = setTimeout(() => { this.updateResults(this.value) }, this.searchDelay)
 
+    if (value) this.handleLoading()
   }
 
   handleKeyDown = event => {
@@ -124,13 +131,14 @@ class Autocomplete {
       case 'Enter': {
         const selectedResult = this.results[this.selectedIndex]
         this.selectResult()
-        this.onSubmit(selectedResult)
+        this.onSubmit(selectedResult ? selectedResult : this.value)
         break
       }
       case 'Esc': // IE/Edge
       case 'Escape': {
         this.hideResults()
         this.setValue()
+        this.updateStyle()
         break
       }
       default:
@@ -140,13 +148,12 @@ class Autocomplete {
 
   handleFocus = event => {
     ///Handle focus
-    if(this.results.length === 0)
+    if (this.results.length === 0)
       this.handleInput(event)
   }
 
   handleBlur = () => {
     ///Handle blur
-    console.log('handleBlur')
 
   }
 
@@ -188,7 +195,6 @@ class Autocomplete {
 
   updateResults = value => {
     const currentSearch = ++this.searchCounter
-    this.handleLoading()
     this.search(value).then(results => {
       if (currentSearch !== this.searchCounter) {
         return
@@ -262,11 +268,21 @@ class Autocomplete {
 
   setValue = result => {
     this.input.value = result ? this.getResultValue(result) : ''
+    this.value = this.input.value
   }
 
+  boldQuery = (string, query) => {
+    const upperCaseString = string.toUpperCase();
+    const upperCaseQuery = query.toUpperCase();
+    const queryIndex = upperCaseString.indexOf(upperCaseQuery);
+    if (!string || queryIndex === -1) {
+      return string; // bail early
+    }
+    const queryLength = query.length;
+    return string.substr(0, queryIndex) + '<span>' + string.substr(queryIndex, queryLength) + '</span>' + this.boldQuery(string.substr(queryIndex + queryLength), query);
+  }
   renderResult = (result, props) => {
-    const tempResult = this.getResultValue(result).toLowerCase()
-    return `<li ${props}>${tempResult.replaceAll(this.value.toLowerCase(), `<span>${this.value}</span>`)}</li>`
+    return `<li ${props}>${this.boldQuery(this.getResultValue(result), this.value)}</li>`
   }
 
   handleUpdate = (results, selectedIndex) => {
