@@ -2,49 +2,52 @@
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+
 <head>
 
-	<!-- Basic Page Needs
+    <!-- Basic Page Needs
   ================================================== -->
-	<meta charset="utf-8" />
-	
-	<title>Soltia Frontend Task</title>
-	
-	<!-- Meta tags -->
-	<meta name="keywords" content="Soltia, Frontend" />
-	<meta name="title" content="Soltia Frontend Task">
-	<!-- Google will often use this as its description of your page/site. Make it good. -->
-	<meta name="description" content="Soltia Frontend Task">
+    <meta charset="utf-8" />
+
+    <title>Soltia Frontend Task</title>
+
+    <!-- Meta tags -->
+    <meta name="keywords" content="Soltia, Frontend" />
+    <meta name="title" content="Soltia Frontend Task">
+    <!-- Google will often use this as its description of your page/site. Make it good. -->
+    <meta name="description" content="Soltia Frontend Task">
 
 
-	<meta name="author" content="Mohsen Khodadadi">
-	<meta name="Copyright" content="All Rights Reserved.">
-	
-	<meta name="google-site-verification" content="Soltia Frontend Task">
-	<!-- Speaking of Google, don't forget to set your site up: http://google.com/webmasters -->
+    <meta name="author" content="Mohsen Khodadadi">
+    <meta name="Copyright" content="All Rights Reserved.">
+
+    <meta name="google-site-verification" content="Soltia Frontend Task">
+    <!-- Speaking of Google, don't forget to set your site up: http://google.com/webmasters -->
 
 
-	<!--[if lt IE 9]>
+    <!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	
-	
-	
-	
-	<!-- Mobile Specific Metas
+
+
+
+
+    <!-- Mobile Specific Metas
   ================================================== -->
-	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
 
 
-	<!-- Favicons
+    <!-- Favicons
 	================================================== -->
-	<link rel="shortcut icon" href="img/soltia.ico">
-	<link rel="apple-touch-icon" href="img/soltia57.jpg">
-	<link rel="apple-touch-icon" sizes="72x72" href="img/soltia72.jpg" />
-	<link rel="apple-touch-icon" sizes="114x114" href="img/soltia114.jpg" />
+    <link rel="shortcut icon" href="img/soltia.ico">
+    <link rel="apple-touch-icon" href="img/soltia57.jpg">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/soltia72.jpg" />
+    <link rel="apple-touch-icon" sizes="114x114" href="img/soltia114.jpg" />
 
-	<!-- The is the icon for iOS's Web Clip.
+    <!-- The is the icon for iOS's Web Clip.
 		 - size: 57x57 for older iPhones, 72x72 for iPads, 114x114 for iPhone4's retina display (IMHO, just go ahead and use the biggest one)
 		 - To prevent iOS from applying its styles to the icon name it thusly: apple-touch-icon-precomposed.png
 		 - Transparency is not recommended (iOS will put a black BG behind the icon) -->
@@ -52,38 +55,53 @@
 
     <script type="module" src="js/script.js"></script>
     <link rel="stylesheet" href="css/style.css">
-	
-	
+
+
 </head>
+
 <body>
 
+    <header>
+        <h1>Soltia Frontend Test</h1>
+    </header>
+    <main>
+        <section title="test 1" aria-labelledby="test1">
+            <h2 id="test1">Test - 1</h2>
 
-    <button class="soltia-button delete-button">
-        Delete
-    </button>
+            <button type="button" title="Delete" name="Delete" class="soltia-button delete-button" aria-label="Delete">
+                Delete
+            </button>
+        </section>
 
-    <div class="soltia-search">
-        <!-- Autocomplete section -->
-        <div id="soltiaSearch" class="autocomplete">
-            <input class="autocomplete-input" placeholder="Search Wikipedia" aria-label="Search Wikipedia">
-            <ul class="autocomplete-result-list"></ul>
-        </div>
+        <section title="test 2" aria-labelledby="test2">
+            <h2 id="test2">Test - 2</h2>
+            <div class="soltia-search">
+                <!-- Autocomplete -->
+                <div id="soltiaSearch" class="autocomplete">
+                    <input title="Search Wikipedia Input" name="Search Wikipedia" class="autocomplete-input"
+                        placeholder="Search Wikipedia" aria-label="Search Wikipedia">
+                    <ul aria-label="Search results" class="autocomplete-result-list"></ul>
+                </div>
 
-        <div class="search-history">
-            <div class="search-history-head">
-                <h3>
-                    Search history
-                </h3>
+                <div class="search-history">
+                    <div class="search-history-head">
+                        <h3 id="searchHistory">
+                            Search history
+                        </h3>
 
-                <button id="clearSearchHistory" class="transparent-button">
-                    Clear search history
-                </button>
+                        <button aria-label="Clear search history" title="Clear search history" id="clearSearchHistory"
+                            class="transparent-button">
+                            Clear search history
+                        </button>
+                    </div>
+                    <!-- Search history -->
+                    <ul aria-labelledby="searchHistory" class="search-history-body" id="soltiaSearchHistory">
+                    </ul>
+                </div>
             </div>
-            <!-- Search history section -->
-            <div class="search-history-body" id="soltiaSearchHistory">
-            </div>
-        </div>
-    </div>
+        </section>
 
+    </main>
 </body>
+
 </html>
