@@ -229,11 +229,11 @@ class Autocomplete {
 
   renderResult = ({ result, index, selectedIndex }) => {
     const id = `${this.baseClass}-result-${index}`
-    const className = `${this.baseClass}-result`
+    const className = `${this.baseClass}-result cursor-pointer`
     const dataResultIndex = index
     const role = 'option'
     const ariaSelected = index === selectedIndex ? 'true' : 'false'
-    return `<li id=${id} class=${className} data-result-index=${dataResultIndex} role=${role} aria-selected=${ariaSelected}>${this.boldQuery(this.getResultValue(result), this.value)}</li>`
+    return `<li id=${id} class='${className}' data-result-index=${dataResultIndex} role=${role} aria-selected=${ariaSelected}>${this.boldQuery(this.getResultValue(result), this.value)}</li>`
   }
 
   boldQuery = (string, query) => {
