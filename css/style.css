@@ -2,7 +2,7 @@ body {
   font-family: sans-serif;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
 
@@ -12,8 +12,11 @@ body {
   background-image: linear-gradient(to right, #f0ae64, #ed9444);
   font-size: 2rem;
   font-weight: 900;
+  max-width: 100%;
 }
-.soltia-button:focus, .soltia-button:hover {
+
+.soltia-button:focus,
+.soltia-button:hover {
   border-color: #52849c;
   box-shadow: 0 0 3px 0px #2a2a2a;
 }
@@ -31,6 +34,7 @@ body {
   content: '\d7';
   border-radius: 100%;
 }
+
 .soltia-button:after {
   background-color: #fff;
   right: 1rem;
@@ -90,7 +94,6 @@ body {
   border: 2px solid #d2d2d2;
   padding: 0;
   box-sizing: border-box;
-  max-height: 20rem;
   overflow-y: auto;
   background: #fff;
   list-style: none;
@@ -158,7 +161,12 @@ body {
 .history-item-info {
   display: flex;
   color: #8f8f8f;
+  align-items: center;
+}
 
+.history-item-date {
+  min-width: 6rem;
+  margin: 0 1rem;
 }
 
 .icon-clear-button {
@@ -167,10 +175,6 @@ body {
   font-size: 1.5rem;
   color: #8f8f8f;
   font-weight: bold;
-}
-
-.history-item-clear {
-  margin-left: 1.5rem;
 }
 
 
@@ -187,4 +191,22 @@ body {
 .autocomplete[data-loading="true"] .query-clear,
 .autocomplete[data-value="empty"] .query-clear {
   display: none;
+}
+
+
+.error {
+  background-color: #f9dbdb;
+  color: #b70000;
+  padding: 0.3rem 1rem;
+  border: 1px solid;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.error::before {
+  content: '\0021';
+  font-size: 2rem;
+  font-weight: bold;
+  padding-right: 0.5rem;
 }
