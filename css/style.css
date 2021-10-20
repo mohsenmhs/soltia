@@ -2,6 +2,10 @@ body {
   font-family: sans-serif;
 }
 
+.cursor-pointer{
+  cursor: pointer;
+}
+
 .soltia-button {
   padding: 3rem 9rem 3rem 1rem;
   border: 0.2rem solid #84817e;
@@ -18,7 +22,6 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  cursor: pointer;
 }
 
 /* Delete icon */
@@ -99,7 +102,6 @@ body {
 
 /* Single result item */
 .autocomplete-result {
-  cursor: pointer;
   padding: 0.6rem 1rem;
 }
 
