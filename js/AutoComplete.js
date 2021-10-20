@@ -1,5 +1,6 @@
 class AutoComplete {
   #DEFAULT_SEARCH_DELAY = 0.5 * 1000 /// 0.5 second delay to trigger call API for search 
+  #MINIMUM_RESULT_LIST_HEIGHT = 300 /// 300px 
 
   value = ''
   searchCounter = 0
@@ -39,6 +40,11 @@ class AutoComplete {
     this.resultList.style.zIndex = '1'
     this.resultList.style.width = '100%'
     this.resultList.style.boxSizing = 'border-box'
+    const spaceBetweenScreenBottomAndResultList = screen.height - this.resultList.getBoundingClientRect().top
+    this.resultList.style.maxHeight = ( spaceBetweenScreenBottomAndResultList > this.#MINIMUM_RESULT_LIST_HEIGHT 
+      ? this.#MINIMUM_RESULT_LIST_HEIGHT 
+      : spaceBetweenScreenBottomAndResultList - 5 ) //5px space between screen button and resultList
+      + 'px'
 
     // Generate ID for results list 
     this.resultList.id = `${this.baseClass}-result-list`
@@ -173,6 +179,7 @@ class AutoComplete {
 
   updateResults = value => {
     this.handleLoading()
+    this.handleRemoveError()
     const currentSearch = ++this.searchCounter
     this.search(value)
       .then(results => {
@@ -182,7 +189,6 @@ class AutoComplete {
           return
         }
         this.results = results
-        this.handleLoaded()
 
         if (this.results.length === 0) {
           this.hideResults()
@@ -195,8 +201,22 @@ class AutoComplete {
       })
       .catch(error => {
         console.error(error)
+        this.handleShowError(error)
         ///notifyUserOfError(error) ///Notif User about error
       })
+      .finally( () => {
+        this.handleLoaded()
+      })
+  }
+
+  handleShowError = (error) => {
+    this.errorElement = document.createElement('div')
+    this.errorElement.classList.add("error")
+    this.errorElement.insertAdjacentHTML('beforeend', error)
+    this.autoCompleteContainer.insertAdjacentElement('afterend', this.errorElement)
+  }
+  handleRemoveError = () => {
+    this.errorElement && this.errorElement.remove()
   }
 
   showResults = () => {
