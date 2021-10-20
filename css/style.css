@@ -99,7 +99,7 @@ body {
 
 /* Single result item */
 .autocomplete-result {
-  cursor: default;
+  cursor: pointer;
   padding: 0.6rem 1rem;
 }
 
