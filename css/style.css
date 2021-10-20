@@ -1,188 +1,188 @@
-html{
+body {
   font-family: sans-serif;
 }
+
 .soltia-button {
-    padding: 3rem 9rem 3rem 1rem;
-    border: 0.2rem solid #84817e;
-    background-image: linear-gradient(to right, #f0ae64, #ed9444);
-    font-size: 2rem;
-    font-weight: 900;
+  padding: 3rem 9rem 3rem 1rem;
+  border: 0.2rem solid #84817e;
+  background-image: linear-gradient(to right, #f0ae64, #ed9444);
+  font-size: 2rem;
+  font-weight: 900;
 }
-.delete-button{
+.soltia-button:focus, .soltia-button:hover {
+  border-color: #52849c;
+  box-shadow: 0 0 3px 0px #2a2a2a;
+}
+
+.delete-button {
   position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 /* Delete icon */
-.delete-button:before, .delete-button:after {
-  content: '|';
-  position: absolute;
-  top: 0;
-
-}
-
-.delete-button:before {
-  transform: rotate(45deg);
-}
 .delete-button:after {
-  transform: rotate(-45deg);
+  font-weight: normal;
+  position: absolute;
+  content: '\d7';
+  border-radius: 100%;
+}
+.soltia-button:after {
+  background-color: #fff;
+  right: 1rem;
+  height: 5rem;
+  width: 5rem;
+  font-size: 5rem;
+  padding: 1rem;
+  line-height: 5rem;
 }
 
-.soltia-button:before, .soltia-button:after {
-    right: 1rem;
-    height: 5rem;
-    width: 5rem;
-    border-radius: 100%;
-    font-size: 3rem;
-    top: 1rem;
-    padding: 1rem;
-  }
-  /* Delete icon background */
-  .soltia-button:before {
-    background-color: #fff;
-  }
+
+.soltia-search {
+  background-color: #f5f5f5;
+  padding: 5px;
+}
+
+.autocomplete {
+  position: relative;
+}
+
+.autocomplete-input {
+  border: 2px solid #d2d2d2;
+  width: 100%;
+  padding: 1rem 3rem 1rem 1rem;
+  box-sizing: border-box;
+  position: relative;
+  font-size: 1rem;
+  flex: 1;
+  background-color: #eee;
+}
+
+.autocomplete-input:focus,
+.autocomplete-input[aria-expanded="true"] {
+  background-color: #fff;
+  outline: none;
+  z-index: 2;
+}
+
+/* Loading spinner */
+.autocomplete[data-loading="true"]::after {
+  content: "";
+  border: 3px solid rgba(0, 0, 0, 0.12);
+  border-right: 3px solid rgba(0, 0, 0, 0.48);
+  border-radius: 100%;
+  width: 1.3rem;
+  height: 1.3rem;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: rotate 1s infinite linear;
+  z-index: 5;
+}
+
+.autocomplete-result-list {
+  margin: 0;
+  border: 2px solid #d2d2d2;
+  padding: 0;
+  box-sizing: border-box;
+  max-height: 20rem;
+  overflow-y: auto;
+  background: #fff;
+  list-style: none;
+  padding: 10px 0;
+  margin-top: 2px;
+  visibility: hidden;
+}
 
 
+/* Single result item */
+.autocomplete-result {
+  cursor: default;
+  padding: 0.6rem 1rem;
+}
 
-  .soltia-search{
-    background-color: #f5f5f5;
-    padding: 5px;
-  }
+.autocomplete-result span {
+  font-weight: bold;
+}
 
-  .autocomplete{
-    position: relative;
-  }
-  .autocomplete-input {
-    border: 2px solid #d2d2d2;
-    width: 100%;
-    padding: 1rem;
-    box-sizing: border-box;
-    position: relative;
-    font-size: 1rem;
-    flex: 1;
-    background-color: #eee;
-  }
-  
-  .autocomplete-input:focus,
-  .autocomplete-input[aria-expanded="true"] {
-    background-color: #fff;
-    outline: none;
-    z-index: 2;
-  }
-  
-  /* Loading spinner */
-  .autocomplete[data-loading="true"]::after {
-    content: "";
-    border: 3px solid rgba(0, 0, 0, 0.12);
-    border-right: 3px solid rgba(0, 0, 0, 0.48);
-    border-radius: 100%;
-    width: 1.3rem;
-    height: 1.3rem;
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    animation: rotate 1s infinite linear;
-    z-index: 5;
-  }
-  
-  .autocomplete-result-list {
-    margin: 0;
-    border: 2px solid #d2d2d2;
-    padding: 0;
-    box-sizing: border-box;
-    max-height: 20rem;
-    overflow-y: auto;
-    background: #fff;
-    list-style: none;
-    padding: 10px 0;
-    margin-top: 2px;
-    visibility: hidden;
+.autocomplete-result:hover,
+.autocomplete-result[aria-selected="true"] {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+@keyframes rotate {
+  from {
+    transform: translateY(-50%) rotate(0deg);
   }
 
-  
-  /* Single result item */
-  .autocomplete-result {
-    cursor: default;
-    padding: 0.6rem 1rem;
+  to {
+    transform: translateY(-50%) rotate(359deg);
   }
-  .autocomplete-result span{
-    font-weight: bold;
-  }
-  .autocomplete-result:hover,
-  .autocomplete-result[aria-selected="true"] {
-    background-color: rgba(0, 0, 0, 0.06);
-  }
-  
-  @keyframes rotate {
-    from {
-      transform: translateY(-50%) rotate(0deg);
-    }
-    to {
-      transform: translateY(-50%) rotate(359deg);
-    }
-  }
-  
-.search-history{
+}
+
+.search-history {
   padding: 1rem 1rem 3rem 1rem;
 }
 
-.transparent-button{
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 0.8rem;
+.transparent-button {
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
 }
-.transparent-button:hover{
-    color: #6c6c6c
+
+.transparent-button:hover {
+  color: #6c6c6c
 }
-.search-history-body{
+
+.search-history-body {
   margin: 0;
   padding: 0;
 }
-  .search-history-head, .history-item{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-  }
 
-  .history-item{
-    padding: 0.8rem 0;
-  }
+.search-history-head,
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
 
-  .history-item-info{
-    display: flex;
-    color: #8f8f8f;
+.history-item {
+  padding: 0.8rem 0;
+}
 
-  }
+.history-item-info {
+  display: flex;
+  color: #8f8f8f;
 
-  .icon-clear-button {
-    height: 1.3rem;
-    width: 1.3rem;
-    font-size: 1rem;
-    color: #8f8f8f;
-    font-weight: bold;
-  }
-  .history-item-clear{
-    margin-left: 1.5rem;
+}
 
-  }
-  .history-item-clear::after, .query-clear::after{
-    
-    left: 0.58rem;
+.icon-clear-button {
+  height: 1.5rem;
+  width: 1.5rem;
+  font-size: 1.5rem;
+  color: #8f8f8f;
+  font-weight: bold;
+}
 
-  }
+.history-item-clear {
+  margin-left: 1.5rem;
+}
 
-  .query-clear-container{
-    position: absolute;
-    right: 1rem;
-    height: 100%;
-    top: 0;
-    display: flex;
-    align-items: center;
-    z-index: 5;
-  }
 
-  .autocomplete[data-loading="true"] .query-clear, .autocomplete[data-value="empty"] .query-clear {
-    display: none;
-  }
+.query-clear-container {
+  position: absolute;
+  right: 1rem;
+  height: 100%;
+  top: 0;
+  display: flex;
+  align-items: center;
+  z-index: 5;
+}
+
+.autocomplete[data-loading="true"] .query-clear,
+.autocomplete[data-value="empty"] .query-clear {
+  display: none;
+}
