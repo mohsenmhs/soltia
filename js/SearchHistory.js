@@ -40,10 +40,8 @@ class SearchHistory {
         historyItemInfo.insertAdjacentHTML('beforeend', historyItemDate)
 
         const historyItemClear = document.createElement('button')
-        historyItemClear.classList.add("history-item-clear")
-        historyItemClear.classList.add("delete-button")
-        historyItemClear.classList.add("transparent-button")
-        historyItemClear.classList.add("icon-clear-button")
+
+        historyItemClear.classList.add("history-item-clear", "delete-button", "cursor-pointer", "transparent-button", "icon-clear-button")
         historyItemClear.setAttribute('aria-label', 'Clear hisory item: ' + selectedResult.title)
         historyItemClear.setAttribute('name', 'Clear hisory item: ' + selectedResult.title)
 

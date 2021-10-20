@@ -54,10 +54,7 @@ class Autocomplete {
     queryClearContainer.classList.add("query-clear-container")
 
     const queryClear = document.createElement('button')
-    queryClear.classList.add("icon-clear-button")
-    queryClear.classList.add("query-clear")
-    queryClear.classList.add("delete-button")
-    queryClear.classList.add("transparent-button")
+    queryClear.classList.add("icon-clear-button", "query-clear", "delete-button", "cursor-pointer", "transparent-button")
     queryClear.setAttribute('aria-label', 'Clear search value')
     queryClear.setAttribute('name', 'Clear search value')
     queryClear.addEventListener('click', this.handleClearQueryClick)
