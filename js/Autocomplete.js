@@ -1,4 +1,6 @@
-class Autocomplete {
+class AutoComplete {
+  #DEFAULT_SEARCH_DELAY = 0.5 * 1000 /// 0.5 second delay to trigger call API for search 
+
   value = ''
   searchCounter = 0
   results = []
@@ -6,7 +8,6 @@ class Autocomplete {
   baseClass = 'autocomplete'
   expanded = false
 
-  #DEFAULT_SEARCH_DELAY = 0.5 * 1000 /// 0.5 second delay to trigger call API for search 
   constructor({
     autoCompleteContainerId,
     search,
@@ -29,6 +30,7 @@ class Autocomplete {
   // Set up aria attributes and events
   initialize = () => {
 
+    document.body.addEventListener('click', this.handleDocumentClick)
     this.input.setAttribute('role', 'combobox')
     this.input.setAttribute('aria-expanded', 'false')
 
@@ -47,6 +49,7 @@ class Autocomplete {
     this.input.addEventListener('input', this.handleInput)
     this.input.addEventListener('keydown', this.handleKeyDown)
     this.input.addEventListener('focus', this.handleFocus)
+    
     this.resultList.addEventListener('click', this.handleResultClick)
 
     ///Clear Query button
@@ -64,6 +67,14 @@ class Autocomplete {
     this.updateStyle()
   }
 
+  handleDocumentClick = event => {
+    if(this.autoCompleteContainer.contains(event.target)) {
+      return
+    }
+    this.hideResults()
+    this.updateStyle()
+    clearTimeout(this.searchDelayTimeout)
+  }
 
   handleInput = event => {
     ////Handle user key down delay. Do not search if the user delay is less than the "searchDelay"
@@ -72,8 +83,6 @@ class Autocomplete {
     const { value } = event.target
     this.value = value
     this.searchDelayTimeout = setTimeout(() => { this.updateResults(this.value) }, this.searchDelay)
-
-    if (value) this.handleLoading()
   }
 
   handleKeyDown = event => {
@@ -125,7 +134,6 @@ class Autocomplete {
       this.handleInput(event)
   }
 
-
   handleResultClick = event => {
     const { target } = event
     //A result can be found by finding the clicked element
@@ -164,6 +172,7 @@ class Autocomplete {
   }
 
   updateResults = value => {
+    this.handleLoading()
     const currentSearch = ++this.searchCounter
     this.search(value)
       .then(results => {
@@ -180,7 +189,7 @@ class Autocomplete {
           return
         }
 
-        this.selectedIndex = 0
+        this.selectedIndex = -1
         this.handleUpdate(this.results, this.selectedIndex)
         this.showResults()
       })
@@ -317,4 +326,4 @@ class Autocomplete {
   }
 }
 
-export default Autocomplete
+export default AutoComplete

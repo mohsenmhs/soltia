@@ -1,4 +1,4 @@
-import Autocomplete from './Autocomplete.js'
+import AutoComplete from './AutoComplete.js'
 import SearchHistory from './SearchHistory.js'
 
 const wikiUrl = 'https://en.wikipedia.org/w/api.php?'
@@ -9,7 +9,7 @@ const clearSearchHistory = document.getElementById('clearSearchHistory')
 clearSearchHistory.addEventListener('click', serchHistory.clearSearchHistory)
 
 
-new Autocomplete(
+new AutoComplete(
     {
         autoCompleteContainerId: 'soltiaSearch',
 
@@ -22,7 +22,7 @@ new Autocomplete(
                 const url = `${wikiUrl}${params
                     }&pssearch=${encodeURI(input)}`
 
-                return new Promise(resolve => {
+                return new Promise((resolve, reject) => {
                     if (input.length < 1) {
                         return resolve([])
                     }
@@ -30,6 +30,9 @@ new Autocomplete(
                         .then(response => response.json())
                         .then(data => {
                             resolve(data.query.prefixsearch)
+                        })
+                        .catch(error => {
+                            reject(error)
                         })
                 })
             },
