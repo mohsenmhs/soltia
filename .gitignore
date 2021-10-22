@@ -1,0 +1,20 @@
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# dependencies
+/node_modules
+
+cypress/screenshots
+cypress/videos
+cypress/logs
+*.log
+*.aes
