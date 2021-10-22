@@ -30,13 +30,13 @@ class SearchHistory {
         historyItem.classList.add("history-item")
         historyItem.setAttribute('aria-label', selectedResult.title)
 
-        const historyItemTitle = `<span class="history-item-title">${selectedResult.title}</span>`
+        const historyItemTitle = `<label class="history-item-title">${selectedResult.title}</label>`
         historyItem.insertAdjacentHTML('beforeend', historyItemTitle)
 
         const historyItemInfo = document.createElement('div')
         historyItemInfo.classList.add("history-item-info")
 
-        const historyItemDate = `<span class="history-item-date">${this.#renderDate(selectedResult.date)}</span>`
+        const historyItemDate = `<time class="history-item-date">${this.#renderDate(selectedResult.date)}</time>`
         historyItemInfo.insertAdjacentHTML('beforeend', historyItemDate)
 
         const historyItemClear = document.createElement('button')
